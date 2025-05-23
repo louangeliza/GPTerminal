@@ -66,7 +66,8 @@ string fd, sd, r;
 cout << "Enter first city: "; cin>> fd;
 cout <<"Enter second city: "; cin>>sd;
 cin.ignore();
-cout <<"Road added between 1 and 2 ",
+cout <<"Road added between 1 and 2 ";
+
 }
 void connectHospitals() {
     string h1, h2, desc;
