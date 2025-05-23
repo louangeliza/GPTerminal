@@ -75,37 +75,37 @@ cout << "Enter first city: "; cin>> fd;
 cout <<"Enter second city: "; cin>>sd;
 cin.ignore();
 cout <<"Enter the budget for the road: ";cin>>r;
-cout<<"Budget added for the road between 1 and 2"
+cout<<"Budget added for the road between 1 and 2";
 
 }
-void connectHospitals() {
-    string h1, h2, desc;
-    cout << "Enter first Hospital ID: "; cin >> h1;
-    cout << "Enter second Hospital ID: "; cin >> h2;
-    cin.ignore();
-    cout << "Enter distance between the hospitals: "; getline(cin, desc);
+// void connectHospitals() {
+//     string h1, h2, desc;
+//     cout << "Enter first Hospital ID: "; cin >> h1;
+//     cout << "Enter second Hospital ID: "; cin >> h2;
+//     cin.ignore();
+//     cout << "Enter distance between the hospitals: "; getline(cin, desc);
 
-    if (hospitals.find(h1) == hospitals.end() || hospitals.find(h2) == hospitals.end()) {
-        cout << "One or both Hospital IDs not found.\n";
-        return;
-    }
+//     if (hospitals.find(h1) == hospitals.end() || hospitals.find(h2) == hospitals.end()) {
+//         cout << "One or both Hospital IDs not found.\n";
+//         return;
+//     }
 
-    auto alreadyExists = [](const vector<pair<string, string>>& conns, const string& id) {
-        return any_of(conns.begin(), conns.end(), [&](const pair<string, string>& p) {
-            return p.first == id;
-        });
-    };
+//     auto alreadyExists = [](const vector<pair<string, string>>& conns, const string& id) {
+//         return any_of(conns.begin(), conns.end(), [&](const pair<string, string>& p) {
+//             return p.first == id;
+//         });
+//     };
 
-    if (alreadyExists(graph[h1], h2) || alreadyExists(graph[h2], h1)) {
-        cout << "Connection already exists.\n";
-        return;
-    }
+//     if (alreadyExists(graph[h1], h2) || alreadyExists(graph[h2], h1)) {
+//         cout << "Connection already exists.\n";
+//         return;
+//     }
 
-    graph[h1].push_back({h2, desc});
-    graph[h2].push_back({h1, desc});
-    saveGraph();
-    cout << "Connection added successfully.\n";
-}
+//     graph[h1].push_back({h2, desc});
+//     graph[h2].push_back({h1, desc});
+//     saveGraph();
+//     cout << "Connection added successfully.\n";
+// }
 int main() {
     CitiesList cities;
 
@@ -118,14 +118,14 @@ int main() {
         
         switch (choice) {
             case '1':
-                addCities(cities, 5); // Add a maximum of 5 cities when selecting option 1
+                addCities(cities, 5); 
                 break;
-            // case '2':
-            //     addRoad(); // You'll need to implement this function
-            //     break;
-            // case '3':
-            //     addBudget();
-            //     break;
+            case '2':
+                addRoad();
+                break;
+            case '3':
+                addBudget();
+                break;
             // case '4':
             //     editCityName(); // You'll need to implement this function
             //     break;
