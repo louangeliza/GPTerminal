@@ -27,21 +27,21 @@ void saveCities() {
 }
 int nextId = 1; // Starting ID for new cities
 
-void loadCities() {
-    cities.clear();
-    ifstream file(CITY_FILE);
-    string line;
-    getline(file, line); // skip header
-    while (getline(file, line)) {
-        stringstream ss(line);
-        string id, name, location, patients_str;
-        getline(ss, id, ',');
-        getline(ss, name, ',');
-        Hospital h{id, name, location, stoi(patients_str)};
-        hospitals[id] = h;
-    }
-    file.close();
-}
+// void loadCities() {
+//     cities.clear();
+//     ifstream file(CITY_FILE);
+//     string line;
+//     getline(file, line); // skip header
+//     while (getline(file, line)) {
+//         stringstream ss(line);
+//         string id, name, location, patients_str;
+//         getline(ss, id, ',');
+//         getline(ss, name, ',');
+//         City h{id, name};
+//         cities[id] = h;
+//     }
+//     file.close();
+// }
 
 
 void addCities(CitiesList& list, int maxCities = 100) {
