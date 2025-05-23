@@ -5,6 +5,7 @@
 #include <fstream>
 #include <algorithm>
 #include <limits>
+#include <sstream>
 
 #define MAX 100
 using namespace std;
@@ -112,7 +113,6 @@ void addBudget() {
     int j = addCityIfNotExists(c2);
 
     if (i != -1 && j != -1 && i != j) {
-        // Automatically add road if it doesn't exist
         if (roads[i][j] == 0) {
             roads[i][j] = roads[j][i] = 1;
             cout << "Road added between " << cities[i].name << " and " << cities[j].name << ".\n";
@@ -257,7 +257,6 @@ void saveToFile() {
 }
 
 int main() {
-    int choice;
     while (true) {
         cout << "\nMenu:\n";
         cout << "1. Add new city(ies)\n";
@@ -270,13 +269,32 @@ int main() {
         cout << "8. Display recorded data on console\n";
         cout << "9. Exit\n";
         cout << "Enter your choice: ";
-        if (!(cin >> choice)) {
-            cout << "Invalid input. Please enter a number.\n";
-            clearInputBuffer();
+
+        string input;
+        getline(cin, input);
+        int choice;
+
+        // Trim whitespace from input
+        input.erase(0, input.find_first_not_of(" \t"));
+        input.erase(input.find_last_not_of(" \t") + 1);
+
+        if (input.empty()) {
+            cout << "Input cannot be empty. Please enter a number.\n";
             continue;
         }
-        clearInputBuffer();
 
+        // Try to convert input to integer
+        try {
+            choice = stoi(input);
+        } catch (const invalid_argument&) {
+            cout << "Invalid input. Please enter a number.\n";
+            continue;
+        } catch (const out_of_range&) {
+            cout << "Input out of range. Please enter a valid number.\n";
+            continue;
+        }
+
+        // Process valid choice
         switch (choice) {
             case 1: addCities(); break;
             case 2: addRoad(); break;
@@ -287,7 +305,7 @@ int main() {
             case 7: displayRoads(); break;
             case 8: displayAll(); break;
             case 9: saveToFile(); return 0;
-            default: cout << "Invalid choice.\n"; break;
+            default: cout << "Invalid choice. Please select a number between 1 and 9.\n"; break;
         }
     }
     return 0;
