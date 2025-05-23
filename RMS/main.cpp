@@ -23,12 +23,13 @@ void clearInputBuffer() {
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-int findCityIndexByName(string name) {
-    transform(name.begin(), name.end(), name.begin(), ::tolower);
+int findCityIndexByName(const string& name) {
+    string lowerName = name;
+    transform(lowerName.begin(), lowerName.end(), lowerName.begin(), ::tolower);
     for (size_t i = 0; i < cities.size(); i++) {
         string cityName = cities[i].name;
         transform(cityName.begin(), cityName.end(), cityName.begin(), ::tolower);
-        if (cityName == name) return static_cast<int>(i);
+        if (cityName == lowerName) return static_cast<int>(i);
     }
     return -1;
 }
@@ -47,7 +48,10 @@ void addCities() {
         c.index = static_cast<int>(cities.size()) + 1;
         cout << "Enter name for city " << c.index << ": ";
         getline(cin, c.name);
-
+        if (c.name.empty()) {
+            cout << "City name cannot be empty. Skipping.\n";
+            continue;
+        }
         if (findCityIndexByName(c.name) == -1) {
             cities.push_back(c);
         } else {
@@ -122,8 +126,16 @@ void editCity() {
     if (index >= 1 && static_cast<size_t>(index) <= cities.size()) {
         cout << "Enter new name for city: ";
         getline(cin, newName);
-        cities[index - 1].name = newName;
-        cout << "City updated successfully.\n";
+        if (newName.empty()) {
+            cout << "City name cannot be empty.\n";
+            return;
+        }
+        if (findCityIndexByName(newName) == -1) {
+            cities[index - 1].name = newName;
+            cout << "City updated successfully.\n";
+        } else {
+            cout << "New city name already exists.\n";
+        }
     } else {
         cout << "Invalid city index.\n";
     }
@@ -137,6 +149,7 @@ void searchCity() {
         clearInputBuffer();
         return;
     }
+    clearInputBuffer();
     if (index >= 1 && static_cast<size_t>(index) <= cities.size()) {
         cout << index << ": " << cities[index - 1].name << "\n";
     } else {
@@ -145,6 +158,10 @@ void searchCity() {
 }
 
 void displayCities() {
+    if (cities.empty()) {
+        cout << "\nNo cities to display.\n";
+        return;
+    }
     cout << "\nCities:\n";
     for (const auto& c : cities) {
         cout << c.index << ": " << c.name << "\n";
@@ -152,31 +169,40 @@ void displayCities() {
 }
 
 void displayRoads() {
-    cout << "Roads Adjacency Matrix:\n\t";
+    if (cities.empty()) {
+        cout << "\nNo cities or roads to display.\n";
+        return;
+    }
+    cout << "\nRoads Adjacency Matrix:\n\t";
     for (const auto& c : cities)
-        cout << c.name << "\t";
+        cout << left << setw(15) << c.name << "\t";
     cout << "\n";
 
     for (size_t i = 0; i < cities.size(); ++i) {
-        cout << cities[i].name << "\t";
+        cout << left << setw(15) << cities[i].name << "\t";
         for (size_t j = 0; j < cities.size(); ++j) {
             cout << roads[i][j] << "\t";
         }
         cout << "\n";
     }
+
+    cout << "\nBudgets Adjacency Matrix:\n\t";
+    for (const auto& c : cities)
+        cout << left << setw(15) << c.name << "\t";
+    cout << "\n";
+
+    for (size_t i = 0; i < cities.size(); ++i) {
+        cout << left << setw(15) << cities[i].name << "\t";
+        for (size_t j = 0; j < cities.size(); ++j) {
+            cout << fixed << setprecision(2) << budgets[i][j] << "\t";
+        }
+        cout << "\n";
+    }
 }
 
-cout << "\nBudgets Adjacency Matrix:\n\t";
-for (const auto& c : cities)
-    cout << c.name << "\t";
-cout << "\n";
-
-for (size_t i = 0; i < cities.size(); ++i) {
-    cout << cities[i].name << "\t";
-    for (size_t j = 0; j < cities.size(); ++j) {
-        cout << fixed << setprecision(2) << budgets[i][j] << "\t";
-    }
-    cout << "\n";
+void displayAll() {
+    displayCities();
+    displayRoads();
 }
 
 void saveToFile() {
@@ -209,6 +235,7 @@ void saveToFile() {
         }
     }
     roadFile.close();
+    cout << "Data saved successfully.\n";
 }
 
 int main() {
@@ -245,4 +272,5 @@ int main() {
             default: cout << "Invalid choice.\n"; break;
         }
     }
+    return 0;
 }
