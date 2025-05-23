@@ -6,3 +6,7 @@
 #include <algorithm>
 #include <regex>
 using namespace std;
+struct Road {
+    string name;
+};
+map<string, Road> roads;
