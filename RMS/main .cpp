@@ -12,20 +12,22 @@ struct City {
     string name;
 };
 const string CITY_FILE = "cities.txt";
+vector<City> cities; // This is a local variable, so it's only accessible within this function
 
-void saveHospitals() {
-    ofstream file(HOSPITAL_FILE);
-    file << "ID,Name,Location,Number of Patients\n";
-    for (const auto& [id, h] : hospitals) {
+struct CitiesList {
+    vector<City> cities; // This is a local variable, so it's only accessible within this function
+};
+void saveCities() {
+    ofstream file(CITY_FILE);
+    file << "ID,Name";
+    for (const auto& [id, h] : cities) {
         file << h.id << "," << h.name << "," << h.location << "," << h.patients << "\n";
     }
     file.close();
 }
 int nextId = 1; // Starting ID for new cities
 
-struct CitiesList {
-    vector<City> cities; // This is a local variable, so it's only accessible within this function
-};
+
 
 void addCities(CitiesList& list, int maxCities = 100) {
     cout << "\nAdding New Cities... (up to " << maxCities << " cities)\n";
