@@ -61,7 +61,9 @@ void addCities(CitiesList& list, int maxCities = 100) {
     }
     
 }
-
+void addRoad(){
+    
+}
 int main() {
     CitiesList cities;
 
