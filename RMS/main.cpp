@@ -144,21 +144,38 @@ void displayAll() {
     }
 }
 
+#include <fstream>
+#include <iomanip> // for setw, left
+using namespace std;
+
 void saveToFile() {
     ofstream cityFile("cities.txt");
-    cityFile << "Index\tCity_Name\n";
+    if (!cityFile) {
+        cerr << "Error opening cities.txt\n";
+        return;
+    }
+
+    // Headers
+    cityFile << left << setw(8) << "Index" << "City_Name\n";
     for (const auto& c : cities) {
-        cityFile << c.index << "\t" << c.name << "\n";
+        cityFile << left << setw(8) << c.index << c.name << "\n";
     }
     cityFile.close();
 
     ofstream roadFile("roads.txt");
-    roadFile << "#\tRoad\tBudget\n";
+    if (!roadFile) {
+        cerr << "Error opening roads.txt\n";
+        return;
+    }
+
+    // Headers
+    roadFile << left << setw(5) << "#" << setw(25) << "Road" << "Budget\n";
     int count = 1;
-    for (size_t i = 0; i < cities.size(); i++) {
-        for (size_t j = i + 1; j < cities.size(); j++) {
+    for (size_t i = 0; i < cities.size(); ++i) {
+        for (size_t j = i + 1; j < cities.size(); ++j) {
             if (roads[i][j]) {
-                roadFile << count++ << ".\t" << cities[i].name << "-" << cities[j].name << "\t" << budgets[i][j] << "\n";
+                string roadName = cities[i].name + "-" + cities[j].name;
+                roadFile << left << setw(5) << (count++) << setw(25) << roadName << fixed << setprecision(2) << budgets[i][j] << "\n";
             }
         }
     }
