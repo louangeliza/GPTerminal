@@ -70,8 +70,7 @@ public:
         : lotId(id), name(nm), location(loc)
     {
         loadData();
-        normalizeCounters();
-        updateSpotStatuses();
+        
     }
 
 
@@ -126,9 +125,7 @@ public:
 
     void saveData()
     {
-        saveVehicles(lotId + "_vehicles.csv");
         saveSpots(lotId + "_spots.csv");
-        saveSessions(lotId + "_sessions.csv");
     }
 
 private:
@@ -159,19 +156,11 @@ private:
             while (getline(ss, tok, ','))
                 cols.push_back(tok);
 
-            if constexpr (is_same<T, Vehicle>::value)
-            {
-                head = new Vehicle{cols[0], cols[1], cols[2], head};
-            }
-            else if constexpr (is_same<T, ParkingSpot>::value)
+            if constexpr (is_same<T, ParkingSpot>::value)
             {
                 head = new ParkingSpot{stoi(cols[0]), cols[1], cols[2] == "1", head};
             }
-            else
-            {
-                head = new ParkingSession{stoi(cols[0]), cols[1],
-                                          stoi(cols[2]), cols[3], cols[4], head};
-            }
+           
         }
     }
 
@@ -218,7 +207,7 @@ public:
         getline(cin, nm);
         
         string id = genId();
-        nodes[id] = new ParkingLot(id, nm, loc);
+        nodes[id] = new ParkingLot(id, nm);
         saveLots();
         saveConnections();
         cout << "Added: " << id << "\n";
