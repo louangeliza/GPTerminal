@@ -11,7 +11,16 @@ struct City {
     int id;
     string name;
 };
+const string CITY_FILE = "cities.txt";
 
+void saveHospitals() {
+    ofstream file(HOSPITAL_FILE);
+    file << "ID,Name,Location,Number of Patients\n";
+    for (const auto& [id, h] : hospitals) {
+        file << h.id << "," << h.name << "," << h.location << "," << h.patients << "\n";
+    }
+    file.close();
+}
 int nextId = 1; // Starting ID for new cities
 
 struct CitiesList {
@@ -137,6 +146,7 @@ void searchCities(){
      cout<<"Enter index: ";cin>>id;
      cout<<"The city with this index number is 1";
 }
+
 int main() {
     CitiesList cities;
 
