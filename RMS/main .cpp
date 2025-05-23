@@ -84,7 +84,10 @@ void addCities(CitiesList& list, int maxCities = 100) {
 
         nextId++;
         list.cities.push_back({nextId, name});
+        saveCities();
+
     }
+    saveCities();
     
 }
 void addRoad(){
