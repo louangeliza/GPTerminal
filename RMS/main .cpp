@@ -18,11 +18,10 @@ struct CitiesList {
     vector<City> cities; // This is a local variable, so it's only accessible within this function
 };
 
-void addCities(CitiesList& list) { 
+void addCities(CitiesList& list) {
     cout << "\nAdding New Cities(ies): ";
     
-    while (!list.cities.empty()) {
-        char c = '\0';
+    while (true) { 
         
         cout << "Enter city name: ";
         string name;
@@ -48,9 +47,9 @@ void addCities(CitiesList& list) {
         
         nextId++;
         list.cities.push_back({nextId, name});
+        
+        cout << "\nCities added successfully!\n";
     }
-    
-    cout << "\nCities added successfully!\n";
 }
 
 int main() {
