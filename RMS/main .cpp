@@ -15,5 +15,11 @@ const string ROADS_FILE = "roads.txt";
 
 void loadRoads(){
     roads.clear();
-    ifstream file
+    ifstream file(ROADS_FILE);
+    string line;
+    getline(file,line);
+    while(getline(file,line)){
+        stringstream ss(line);
+        string index,name;
+    }
 }
