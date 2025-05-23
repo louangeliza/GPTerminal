@@ -48,15 +48,67 @@ int addCityIfNotExists(const string& name) {
     return index;
 }
 
+bool getNumericInput(const string& prompt, int& result) {
+    string input;
+    cout << prompt;
+    getline(cin, input);
+
+    // Trim whitespace
+    input.erase(0, input.find_first_not_of(" \t"));
+    input.erase(input.find_last_not_of(" \t") + 1);
+
+    if (input.empty()) {
+        cout << "Input cannot be empty. Please enter a number.\n";
+        return false;
+    }
+
+    try {
+        result = stoi(input);
+        return true;
+    } catch (const invalid_argument&) {
+        cout << "Invalid input. Please enter a number.\n";
+        return false;
+    } catch (const out_of_range&) {
+        cout << "Input out of range. Please enter a valid number.\n";
+        return false;
+    }
+}
+
+bool getDoubleInput(const string& prompt, double& result) {
+    string input;
+    cout << prompt;
+    getline(cin, input);
+
+    // Trim whitespace
+    input.erase(0, input.find_first_not_of(" \t"));
+    input.erase(input.find_last_not_of(" \t") + 1);
+
+    if (input.empty()) {
+        cout << "Input cannot be empty. Please enter a number.\n";
+        return false;
+    }
+
+    try {
+        result = stod(input);
+        return true;
+    } catch (const invalid_argument&) {
+        cout << "Invalid input. Please enter a number.\n";
+        return false;
+    } catch (const out_of_range&) {
+        cout << "Input out of range. Please enter a valid number.\n";
+        return false;
+    }
+}
+
 void addCities() {
     int count;
-    cout << "Enter the number of cities to add: ";
-    if (!(cin >> count) || count <= 0) {
-        cout << "Invalid number.\n";
-        clearInputBuffer();
+    if (!getNumericInput("Enter the number of cities to add: ", count)) {
         return;
     }
-    clearInputBuffer();
+    if (count <= 0) {
+        cout << "Invalid number. Must be positive.\n";
+        return;
+    }
     for (int i = 0; i < count; i++) {
         City c;
         c.index = static_cast<int>(cities.size()) + 1;
@@ -106,8 +158,17 @@ void addBudget() {
     double budget;
     cout << "Enter the name of the first city: ";
     getline(cin, c1);
+    if (c1.empty()) {
+        cout << "City name cannot be empty.\n";
+        return;
+    }
+
     cout << "Enter the name of the second city: ";
     getline(cin, c2);
+    if (c2.empty()) {
+        cout << "City name cannot be empty.\n";
+        return;
+    }
 
     int i = addCityIfNotExists(c1);
     int j = addCityIfNotExists(c2);
@@ -117,13 +178,13 @@ void addBudget() {
             roads[i][j] = roads[j][i] = 1;
             cout << "Road added between " << cities[i].name << " and " << cities[j].name << ".\n";
         }
-        cout << "Enter the budget for the road: ";
-        if (!(cin >> budget) || budget < 0) {
-            cout << "Invalid budget.\n";
-            clearInputBuffer();
+        if (!getDoubleInput("Enter the budget for the road: ", budget)) {
             return;
         }
-        clearInputBuffer();
+        if (budget < 0) {
+            cout << "Invalid budget. Must be non-negative.\n";
+            return;
+        }
         budgets[i][j] = budgets[j][i] = budget;
         cout << "Budget added between " << cities[i].name << " and " << cities[j].name << ".\n";
     } else {
@@ -133,41 +194,33 @@ void addBudget() {
 
 void editCity() {
     int index;
-    string newName;
-    cout << "Enter the index of the city to edit: ";
-    if (!(cin >> index)) {
-        cout << "Invalid index.\n";
-        clearInputBuffer();
+    if (!getNumericInput("Enter the index of the city to edit: ", index)) {
         return;
     }
-    clearInputBuffer();
-    if (index >= 1 && static_cast<size_t>(index) <= cities.size()) {
-        cout << "Enter new name for city: ";
-        getline(cin, newName);
-        if (newName.empty()) {
-            cout << "City name cannot be empty.\n";
-            return;
-        }
-        if (findCityIndexByName(newName) == -1) {
-            cities[index - 1].name = newName;
-            cout << "City updated successfully.\n";
-        } else {
-            cout << "New city name already exists.\n";
-        }
-    } else {
+    if (index < 1 || static_cast<size_t>(index) > cities.size()) {
         cout << "Invalid city index.\n";
+        return;
+    }
+    string newName;
+    cout << "Enter new name for city: ";
+    getline(cin, newName);
+    if (newName.empty()) {
+        cout << "City name cannot be empty.\n";
+        return;
+    }
+    if (findCityIndexByName(newName) == -1) {
+        cities[index - 1].name = newName;
+        cout << "City updated successfully.\n";
+    } else {
+        cout << "New city name already exists.\n";
     }
 }
 
 void searchCity() {
     int index;
-    cout << "Enter city index to search: ";
-    if (!(cin >> index)) {
-        cout << "Invalid input.\n";
-        clearInputBuffer();
+    if (!getNumericInput("Enter city index to search: ", index)) {
         return;
     }
-    clearInputBuffer();
     if (index >= 1 && static_cast<size_t>(index) <= cities.size()) {
         cout << index << ": " << cities[index - 1].name << "\n";
     } else {
@@ -268,33 +321,12 @@ int main() {
         cout << "7. Display roads\n";
         cout << "8. Display recorded data on console\n";
         cout << "9. Exit\n";
-        cout << "Enter your choice: ";
 
-        string input;
-        getline(cin, input);
         int choice;
-
-        // Trim whitespace from input
-        input.erase(0, input.find_first_not_of(" \t"));
-        input.erase(input.find_last_not_of(" \t") + 1);
-
-        if (input.empty()) {
-            cout << "Input cannot be empty. Please enter a number.\n";
+        if (!getNumericInput("Enter your choice: ", choice)) {
             continue;
         }
 
-        // Try to convert input to integer
-        try {
-            choice = stoi(input);
-        } catch (const invalid_argument&) {
-            cout << "Invalid input. Please enter a number.\n";
-            continue;
-        } catch (const out_of_range&) {
-            cout << "Input out of range. Please enter a valid number.\n";
-            continue;
-        }
-
-        // Process valid choice
         switch (choice) {
             case 1: addCities(); break;
             case 2: addRoad(); break;
