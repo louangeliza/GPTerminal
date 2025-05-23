@@ -18,7 +18,7 @@ struct CitiesList {
     vector<City> cities; // This is a local variable, so it's only accessible within this function
 };
 
-void addCities(CitiesList& list, int maxCities = 10) {
+void addCities(CitiesList& list, int maxCities = 100) {
     cout << "\nAdding New Cities... (up to " << maxCities << " cities)\n";
     
     // Ask how many cities the user wants to add
@@ -59,6 +59,7 @@ void addCities(CitiesList& list, int maxCities = 10) {
         nextId++;
         list.cities.push_back({nextId, name});
     }
+    
 }
 
 int main() {
