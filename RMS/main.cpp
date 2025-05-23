@@ -34,6 +34,19 @@ int findCityIndexByName(const string& name) {
     return -1;
 }
 
+int addCityIfNotExists(const string& name) {
+    if (name.empty()) return -1;
+    int index = findCityIndexByName(name);
+    if (index == -1) {
+        City c;
+        c.index = static_cast<int>(cities.size()) + 1;
+        c.name = name;
+        cities.push_back(c);
+        return c.index - 1; // Return the new city's index (0-based)
+    }
+    return index;
+}
+
 void addCities() {
     int count;
     cout << "Enter the number of cities to add: ";
@@ -76,14 +89,14 @@ void addRoad() {
         return;
     }
 
-    int i = findCityIndexByName(c1);
-    int j = findCityIndexByName(c2);
+    int i = addCityIfNotExists(c1);
+    int j = addCityIfNotExists(c2);
 
     if (i != -1 && j != -1 && i != j) {
         roads[i][j] = roads[j][i] = 1;
         cout << "Road added between " << cities[i].name << " and " << cities[j].name << ".\n";
     } else {
-        cout << "Invalid cities or same city entered.\n";
+        cout << "Same city entered. Road not added.\n";
     }
 }
 
@@ -95,10 +108,15 @@ void addBudget() {
     cout << "Enter the name of the second city: ";
     getline(cin, c2);
 
-    int i = findCityIndexByName(c1);
-    int j = findCityIndexByName(c2);
+    int i = addCityIfNotExists(c1);
+    int j = addCityIfNotExists(c2);
 
-    if (i != -1 && j != -1 && roads[i][j] == 1) {
+    if (i != -1 && j != -1 && i != j) {
+        // Automatically add road if it doesn't exist
+        if (roads[i][j] == 0) {
+            roads[i][j] = roads[j][i] = 1;
+            cout << "Road added between " << cities[i].name << " and " << cities[j].name << ".\n";
+        }
         cout << "Enter the budget for the road: ";
         if (!(cin >> budget) || budget < 0) {
             cout << "Invalid budget.\n";
@@ -109,7 +127,7 @@ void addBudget() {
         budgets[i][j] = budgets[j][i] = budget;
         cout << "Budget added between " << cities[i].name << " and " << cities[j].name << ".\n";
     } else {
-        cout << "No road exists between the given cities.\n";
+        cout << "Same city entered. Budget not added.\n";
     }
 }
 
@@ -250,7 +268,7 @@ int main() {
         cout << "6. Display cities\n";
         cout << "7. Display roads\n";
         cout << "8. Display recorded data on console\n";
-        cout << "9. Save and Exit\n";
+        cout << "9. Exit\n";
         cout << "Enter your choice: ";
         if (!(cin >> choice)) {
             cout << "Invalid input. Please enter a number.\n";
