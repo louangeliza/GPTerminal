@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -14,6 +15,8 @@ struct City {
 void addCities() {
     int nextId = 1; // Starting ID for new cities
     
+     
+    struct City newCity;
     cout << "\nAdding New Cities(ies): ";
     
     while (!added) {
