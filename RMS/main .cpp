@@ -6,16 +6,17 @@
 #include <algorithm>
 #include <regex>
 using namespace std;
-struct Road {
+struct City {
+    int id;
     string name;
 };
-map<string, Road> roads;
+map<string, City> cities;
 map<string, vector<pair<string, string>>> graph;
-const string ROADS_FILE = "roads.txt";
+const string CITIES_FILE = "cities.txt";
 
 void loadRoads(){
-    roads.clear();
-    ifstream file(ROADS_FILE);
+    cities.clear();
+    ifstream file(CITIES_FILE);
     string line;
     getline(file,line);
     while(getline(file,line)){
@@ -95,4 +96,36 @@ void addCities() {
             nextId++;
         }
     }
+}
+void addSingleCity(int id) {
+    struct City newCity = {id, "Enter city name"};
+    
+    cout << "\nCity ID: " << id << endl;
+    cout << "City Name: ";
+    string name;
+    cin >> name;
+    if (name.empty()) {
+        cout << "City name cannot be empty. Please try again.\n";
+        return;
+    }
+    newCity.name = name;
+    
+    // Validate the ID to ensure uniqueness
+    bool unique = true;
+    for (const City& c : cities) {
+        if (c.id == id) {
+            unique = false;
+            break;
+        }
+    }
+    if (!unique) {
+        cout << "ID already exists. Please choose a different number.\n";
+        return;
+    }
+    
+    // Add to the list
+    cities.push_back(newCity);
+    saveCities();
+    
+    displayCities();
 }
