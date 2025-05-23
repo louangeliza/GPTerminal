@@ -10,22 +10,7 @@ struct City {
     int id;
     string name;
 };
-map<string, City> cities;
-map<string, vector<pair<string, string>>> graph;
-const string CITIES_FILE = "cities.txt";
 
-void loadCities(){
-    cities.clear();
-    ifstream file(CITIES_FILE);
-    string line;
-    getline(file,line);
-    while(getline(file,line)){
-        stringstream ss(line);
-        string id,name;
-        getline(ss, id, ',  ');
-        getline(ss,name);
-    }
-}
 
 int main() {
     char choice;
