@@ -36,6 +36,7 @@ void addCities(CitiesList& list, int maxCities = 10) {
         cout << "\nEnter city name: ";
         string name;
         cin >> name;
+        nextId++;
 
         if (name.empty()) {
             cout << "City name cannot be empty. Please try again.\n";
