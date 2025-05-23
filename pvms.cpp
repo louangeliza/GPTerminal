@@ -109,36 +109,7 @@ public:
         return false;
     }
 
-    bool deleteSession(int sid)
-    {
-        ParkingSession **ptr = &sessions;
-        while (*ptr)
-        {
-            if ((*ptr)->id == sid)
-            {
-                ParkingSession *temp = *ptr;
-                // Free up the parking spot
-                ParkingSpot *spot = findSpot(temp->spotId);
-                if (spot)
-                    spot->isOccupied = false;
-                *ptr = temp->next;
-                delete temp;
-                saveData();
-                return true;
-            }
-            ptr = &(*ptr)->next;
-        }
-        return false;
-    }
-
-    void displayVehicles()
-    {
-        cout << "-- Vehicles in " << name << " (" << lotId << ") --\n";
-        for (auto *v = vehicles; v; v = v->next)
-            cout << "License: " << v->id << " | Type: " << v->type
-                 << " | Owner: " << v->owner << "\n";
-    }
-
+    
     void displaySpots()
     {
         cout << "-- Parking Spots in " << name << " (" << lotId << ") --\n";
@@ -147,23 +118,10 @@ public:
                  << (s->isOccupied ? "Occupied" : "Available") << "\n";
     }
 
-    void displaySessions(bool currentOnly = false)
-    {
-        cout << "-- Parking Sessions in " << name << " (" << lotId << ") --\n";
-        for (auto *s = sessions; s; s = s->next)
-        {
-            if (!currentOnly || s->exitTime == "")
-                cout << s->id << ": " << s->vehicleId << " @ S" << s->spotId
-                     << " | " << s->entryTime << " - "
-                     << (s->exitTime == "" ? "Ongoing" : s->exitTime) << "\n";
-        }
-    }
 
     void loadData()
     {
-        loadList<Vehicle>(lotId + "_vehicles.csv", vehicles);
         loadList<ParkingSpot>(lotId + "_spots.csv", spots);
-        loadList<ParkingSession>(lotId + "_sessions.csv", sessions);
     }
 
     void saveData()
@@ -174,13 +132,7 @@ public:
     }
 
 private:
-    Vehicle *findVehicle(const string &vId)
-    {
-        for (auto *v = vehicles; v; v = v->next)
-            if (v->id == vId)
-                return v;
-        return nullptr;
-    }
+    
 
     ParkingSpot *findSpot(int id)
     {
@@ -190,29 +142,6 @@ private:
         return nullptr;
     }
 
-    ParkingSession *findSession(int id)
-    {
-        for (auto *s = sessions; s; s = s->next)
-            if (s->id == id)
-                return s;
-        return nullptr;
-    }
-
-    void updateSpotStatuses()
-    {
-        unordered_set<int> occupiedSpots;
-        for (auto *s = sessions; s; s = s->next)
-        {
-            if (s->exitTime == "")
-            {
-                occupiedSpots.insert(s->spotId);
-            }
-        }
-        for (auto *spot = spots; spot; spot = spot->next)
-        {
-            spot->isOccupied = occupiedSpots.count(spot->id);
-        }
-    }
 
     template <typename T>
     void loadList(const string &fn, T *&head)
@@ -246,14 +175,7 @@ private:
         }
     }
 
-    void saveVehicles(const string &fn)
-    {
-        ofstream f(fn);
-        f << "license_plate,type,owner\n";
-        for (auto *v = vehicles; v; v = v->next)
-            f << v->id << ',' << v->type << ',' << v->owner << "\n";
-    }
-
+    
     void saveSpots(const string &fn)
     {
         ofstream f(fn);
@@ -262,22 +184,6 @@ private:
             f << s->id << ',' << s->type << ',' << (s->isOccupied ? 1 : 0) << "\n";
     }
 
-    void saveSessions(const string &fn)
-    {
-        ofstream f(fn);
-        f << "id,vehicle_id,spot_id,entry_time,exit_time\n";
-        for (auto *s = sessions; s; s = s->next)
-            f << s->id << ',' << s->vehicleId << ',' << s->spotId << ','
-              << s->entryTime << ',' << s->exitTime << "\n";
-    }
-
-    void normalizeCounters()
-    {
-        for (auto *s = spots; s; s = s->next)
-            nextSpotId = max(nextSpotId, s->id + 1);
-        for (auto *s = sessions; s; s = s->next)
-            nextSessionId = max(nextSessionId, s->id + 1);
-    }
 };
 
 // ======== ParkingNetwork Class ========
@@ -310,9 +216,7 @@ public:
         cout << "Name: ";
         string nm;
         getline(cin, nm);
-        cout << "Location: ";
-        string loc;
-        getline(cin, loc);
+        
         string id = genId();
         nodes[id] = new ParkingLot(id, nm, loc);
         saveLots();
