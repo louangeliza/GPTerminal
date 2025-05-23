@@ -160,20 +160,20 @@ int main() {
                 break;
             // case '5':
             //    { // Search
-            string query = utils.getStringInput("Enter search term: ");
-            vector<Parking *> results = parkingSystem.searchParking(query);
-            if (results.empty())
-            {
-                cout << "No matching parking lots found.\n";
-            }
-            else
-            {
-                cout << "Search results:\n";
-                for (Parking *p : results)
-                {
-                    p->displayParking(p);
-                }
-            }
+            string query = utils.getStringInput("Enter index: ");
+            // vector<City *> results = cities.searchCity(query);
+            // if (results.empty())
+            // {
+            //     cout << "No matching parking lots found.\n";
+            // }
+            // else
+            // {
+            //     cout << "Search results:\n";
+            //     for (Parking *p : results)
+            //     {
+            //         p->displayParking(p);
+            //     }
+            // }
             break;
         }
             //     break;
