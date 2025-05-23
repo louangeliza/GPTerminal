@@ -1,224 +1,191 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <limits>
+#include <iomanip>
+#include <fstream>
+#include <algorithm>
+
+#define MAX 100
+
 using namespace std;
 
-class RoadManagementSystem {
-private:
-    vector<string> cities;
-    vector<vector<bool>> roadMatrix;
-    vector<vector<double>> budgetMatrix;
-    int cityCount;
-
-public:
-    RoadManagementSystem() : cityCount(0) {}
-
-    void addCities() {
-        string cityName;
-        cout << "Enter city name(s) (type 'done' when finished):\n";
-        while (true) {
-            cout << "City name: ";
-            cin >> cityName;
-            if (cityName == "done") break;
-            
-            cities.push_back(cityName);
-            cityCount++;
-            
-            // Resize matrices
-            roadMatrix.resize(cityCount, vector<bool>(cityCount, false));
-            budgetMatrix.resize(cityCount, vector<double>(cityCount, 0.0));
-            
-            cout << "City added with index: " << cityCount << endl;
-        }
-    }
-
-    void addRoad() {
-        string city1, city2;
-        cout << "Enter first city name: ";
-        cin >> city1;
-        cout << "Enter second city name: ";
-        cin >> city2;
-
-        int index1 = -1, index2 = -1;
-        for (int i = 0; i < cities.size(); i++) {
-            if (cities[i] == city1) index1 = i;
-            if (cities[i] == city2) index2 = i;
-        }
-
-        if (index1 == -1 || index2 == -1) {
-            cout << "Error: One or both cities do not exist!\n";
-            return;
-        }
-
-        roadMatrix[index1][index2] = true;
-        roadMatrix[index2][index1] = true;
-        cout << "Road added successfully!\n";
-    }
-
-    void addBudget() {
-        string city1, city2;
-        cout << "Enter first city name: ";
-        cin >> city1;
-        cout << "Enter second city name: ";
-        cin >> city2;
-
-        int index1 = -1, index2 = -1;
-        for (int i = 0; i < cities.size(); i++) {
-            if (cities[i] == city1) index1 = i;
-            if (cities[i] == city2) index2 = i;
-        }
-
-        if (index1 == -1 || index2 == -1) {
-            cout << "Error: One or both cities do not exist!\n";
-            return;
-        }
-
-        if (!roadMatrix[index1][index2]) {
-            cout << "Error: No road exists between these cities!\n";
-            return;
-        }
-
-        double budget;
-        cout << "Enter budget for the road: ";
-        cin >> budget;
-        budgetMatrix[index1][index2] = budget;
-        budgetMatrix[index2][index1] = budget;
-        cout << "Budget added successfully!\n";
-    }
-
-    void editCity() {
-        int index;
-        cout << "Enter city index: ";
-        cin >> index;
-        
-        if (index < 1 || index > cityCount) {
-            cout << "Error: Invalid city index!\n";
-            return;
-        }
-
-        string newName;
-        cout << "Enter new city name: ";
-        cin >> newName;
-        cities[index - 1] = newName;
-        cout << "City name updated successfully!\n";
-    }
-
-    void searchCity() {
-        int index;
-        cout << "Enter city index: ";
-        cin >> index;
-        
-        if (index < 1 || index > cityCount) {
-            cout << "Error: Invalid city index!\n";
-            return;
-        }
-
-        cout << "City name: " << cities[index - 1] << endl;
-    }
-
-    void displayCities() {
-        cout << "\nList of Cities:\n";
-        for (int i = 0; i < cities.size(); i++) {
-            cout << i + 1 << ". " << cities[i] << endl;
-        }
-    }
-
-    void displayRoads() {
-        cout << "\nRoad Connections:\n";
-        for (int i = 0; i < cityCount; i++) {
-            for (int j = i + 1; j < cityCount; j++) {
-                if (roadMatrix[i][j]) {
-                    cout << cities[i] << " <-> " << cities[j] << endl;
-                }
-            }
-        }
-    }
-
-    void displayData() {
-        cout << "\nRoad Matrix:\n";
-        cout << "  ";
-        for (int i = 0; i < cityCount; i++) {
-            cout << cities[i] << " ";
-        }
-        cout << "\n";
-        
-        for (int i = 0; i < cityCount; i++) {
-            cout << cities[i] << " ";
-            for (int j = 0; j < cityCount; j++) {
-                cout << roadMatrix[i][j] << " ";
-            }
-            cout << "\n";
-        }
-
-        cout << "\nBudget Matrix:\n";
-        cout << "  ";
-        for (int i = 0; i < cityCount; i++) {
-            cout << cities[i] << " ";
-        }
-        cout << "\n";
-        
-        for (int i = 0; i < cityCount; i++) {
-            cout << cities[i] << " ";
-            for (int j = 0; j < cityCount; j++) {
-                cout << budgetMatrix[i][j] << " ";
-            }
-            cout << "\n";
-        }
-    }
+struct City {
+    int index;
+    string name;
 };
 
-int main() {
-    RoadManagementSystem rms;
-    int choice;
+vector<City> cities;
+int roads[MAX][MAX] = {0};
+double budgets[MAX][MAX] = {0.0};
 
+int findCityIndexByName(string name) {
+    transform(name.begin(), name.end(), name.begin(), ::tolower);
+    for (int i = 0; i < cities.size(); i++) {
+        string cityName = cities[i].name;
+        transform(cityName.begin(), cityName.end(), cityName.begin(), ::tolower);
+        if (cityName == name) return i;
+    }
+    return -1;
+}
+
+void addCities() {
+    int count;
+    cout << "Enter the number of cities to add: ";
+    cin >> count;
+    cin.ignore();
+    for (int i = 0; i < count; i++) {
+        City c;
+        c.index = cities.size() + 1;
+        cout << "Enter name for city " << c.index << ": ";
+        getline(cin, c.name);
+
+        if (findCityIndexByName(c.name) == -1) {
+            cities.push_back(c);
+        } else {
+            cout << "City already exists. Skipping.\n";
+        }
+    }
+}
+
+void addRoad() {
+    string c1, c2;
+    cin.ignore();
+    cout << "Enter the name of the first city: "; getline(cin, c1);
+    cout << "Enter the name of the second city: "; getline(cin, c2);
+    int i = findCityIndexByName(c1);
+    int j = findCityIndexByName(c2);
+    if (i != -1 && j != -1 && i != j) {
+        roads[i][j] = roads[j][i] = 1;
+        cout << "Road added between " << cities[i].name << " and " << cities[j].name << ".\n";
+    } else {
+        cout << "Invalid cities entered.\n";
+    }
+}
+
+void addBudget() {
+    string c1, c2;
+    double budget;
+    cin.ignore();
+    cout << "Enter the name of the first city: "; getline(cin, c1);
+    cout << "Enter the name of the second city: "; getline(cin, c2);
+    int i = findCityIndexByName(c1);
+    int j = findCityIndexByName(c2);
+    if (i != -1 && j != -1 && roads[i][j] == 1) {
+        cout << "Enter the budget for the road: ";
+        cin >> budget;
+        budgets[i][j] = budgets[j][i] = budget;
+        cout << "Budget added for the road between " << cities[i].name << " and " << cities[j].name << ".\n";
+    } else {
+        cout << "Road not found between the cities.\n";
+    }
+}
+
+void editCity() {
+    int index;
+    string newName;
+    cout << "Enter the index of the city to edit: ";
+    cin >> index;
+    cin.ignore();
+    if (index >= 1 && index <= cities.size()) {
+        cout << "Enter new name for city: ";
+        getline(cin, newName);
+        cities[index - 1].name = newName;
+        cout << "City updated successfully.\n";
+    } else {
+        cout << "Invalid city index.\n";
+    }
+}
+
+void searchCity() {
+    int index;
+    cout << "Enter city index to search: ";
+    cin >> index;
+    if (index >= 1 && index <= cities.size()) {
+        cout << index << ": " << cities[index - 1].name << "\n";
+    } else {
+        cout << "City not found.\n";
+    }
+}
+
+void displayCities() {
+    cout << "Cities:\n";
+    for (auto c : cities) {
+        cout << c.index << ": " << c.name << "\n";
+    }
+}
+
+void displayRoads() {
+    cout << "Roads Adjacency Matrix:\n";
+    for (int i = 0; i < cities.size(); i++) {
+        for (int j = 0; j < cities.size(); j++) {
+            cout << roads[i][j];
+        }
+        cout << endl;
+    }
+}
+
+void displayAll() {
+    displayCities();
+    cout << "\nRoads Adjacency Matrix:\n";
+    displayRoads();
+    cout << "\nBudgets Adjacency Matrix:\n";
+    for (int i = 0; i < cities.size(); i++) {
+        for (int j = 0; j < cities.size(); j++) {
+            cout << fixed << setprecision(2) << budgets[i][j] << "\t";
+        }
+        cout << endl;
+    }
+}
+
+void saveToFile() {
+    ofstream cityFile("cities.txt");
+    cityFile << "Index\tCity_Name\n";
+    for (auto c : cities) {
+        cityFile << c.index << "\t" << c.name << "\n";
+    }
+    cityFile.close();
+
+    ofstream roadFile("roads.txt");
+    roadFile << "#\tRoad\tBudget\n";
+    int count = 1;
+    for (int i = 0; i < cities.size(); i++) {
+        for (int j = i + 1; j < cities.size(); j++) {
+            if (roads[i][j]) {
+                roadFile << count++ << ".\t" << cities[i].name << "-" << cities[j].name << "\t" << budgets[i][j] << "\n";
+            }
+        }
+    }
+    roadFile.close();
+}
+
+int main() {
+    int choice;
     while (true) {
-        cout << "\n=== Road Management System ===\n";
-        cout << "1. Add New City(ies)\n";
-        cout << "2. Add Road Between Cities\n";
-        cout << "3. Add The Budget For Roads\n";
-        cout << "4. Edit City\n";
-        cout << "5. Search For A City Using Its Index\n";
-        cout << "6. Display Cities\n";
-        cout << "7. Display Roads\n";
-        cout << "8. Display Recorded Data On Console\n";
+        cout << "\nMenu:\n";
+        cout << "1. Add new city(ies)\n";
+        cout << "2. Add roads between cities\n";
+        cout << "3. Add the budget for roads\n";
+        cout << "4. Edit city\n";
+        cout << "5. Search for a city using its index\n";
+        cout << "6. Display cities\n";
+        cout << "7. Display roads\n";
+        cout << "8. Display recorded data on console\n";
         cout << "9. Exit\n";
         cout << "Enter your choice: ";
-        
         cin >> choice;
 
         switch (choice) {
-            case 1:
-                rms.addCities();
-                break;
-            case 2:
-                rms.addRoad();
-                break;
-            case 3:
-                rms.addBudget();
-                break;
-            case 4:
-                rms.editCity();
-                break;
-            case 5:
-                rms.searchCity();
-                break;
-            case 6:
-                rms.displayCities();
-                break;
-            case 7:
-                rms.displayRoads();
-                break;
-            case 8:
-                rms.displayData();
-                break;
-            case 9:
-                cout << "Thank you for using the Road Management System!\n";
-                return 0;
-            default:
-                cout << "Invalid choice! Please try again.\n";
+            case 1: addCities(); break;
+            case 2: addRoad(); break;
+            case 3: addBudget(); break;
+            case 4: editCity(); break;
+            case 5: searchCity(); break;
+            case 6: displayCities(); break;
+            case 7: displayRoads(); break;
+            case 8: displayAll(); break;
+            case 9: saveToFile(); return 0;
+            default: cout << "Invalid choice.\n"; break;
         }
     }
-
     return 0;
-} 
+}
