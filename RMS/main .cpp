@@ -152,9 +152,9 @@ int main() {
             case '3':
                 addBudget();
                 break;
-            // case '4':
-            //     editCityName(); // You'll need to implement this function
-            //     break;
+            case '4':
+                editCityName(); // You'll need to implement this function
+                break;
             // case '5':
             //     searchCities();
             //     break;
