@@ -60,8 +60,17 @@ void addRoad() {
     string c1, c2;
     cout << "Enter the name of the first city: ";
     getline(cin, c1);
+    if (c1.empty()) {
+        cout << "City name cannot be empty.\n";
+        return;
+    }
+
     cout << "Enter the name of the second city: ";
     getline(cin, c2);
+    if (c2.empty()) {
+        cout << "City name cannot be empty.\n";
+        return;
+    }
 
     int i = findCityIndexByName(c1);
     int j = findCityIndexByName(c2);
