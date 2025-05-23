@@ -45,12 +45,6 @@ int readInt(const string &prompt, int minVal = INT_MIN, int maxVal = INT_MAX)
 }
 
 // ======== Data Structures ========
-struct Vehicle
-{
-    string id; // License plate (e.g., "RAD 220 C")
-    string type, owner;
-    Vehicle *next;
-};
 
 struct ParkingSpot
 {
@@ -60,23 +54,13 @@ struct ParkingSpot
     ParkingSpot *next;
 };
 
-struct ParkingSession
-{
-    int id;
-    string vehicleId; // License plate
-    int spotId;
-    string entryTime, exitTime;
-    ParkingSession *next;
-};
 
 // ======== ParkingLot Class ========
 class ParkingLot
 {
 public:
     string lotId, name, location;
-    Vehicle *vehicles = nullptr;
     ParkingSpot *spots = nullptr;
-    ParkingSession *sessions = nullptr;
 
     int nextSpotId = 1;
     int nextSessionId = 1;
@@ -90,17 +74,6 @@ public:
         updateSpotStatuses();
     }
 
-    bool registerVehicle(const string &lp, const string &t, const string &own)
-    {
-        if (findVehicle(lp))
-        {
-            cout << "Vehicle already exists!\n";
-            return false;
-        }
-        vehicles = new Vehicle{lp, t, own, vehicles};
-        saveData();
-        return true;
-    }
 
     int addParkingSpot(const string &t)
     {
@@ -110,62 +83,8 @@ public:
         return id;
     }
 
-    int startParkingSession(const string &vId, int sid, const string &entry)
-    {
-        if (!findVehicle(vId) || !findSpot(sid))
-            return -1;
-        ParkingSpot *spot = findSpot(sid);
-        if (spot->isOccupied)
-            return -2;
 
-        int id = nextSessionId++;
-        sessions = new ParkingSession{id, vId, sid, entry, "", sessions};
-        spot->isOccupied = true;
-        saveData();
-        return id;
-    }
 
-    bool endParkingSession(int sessionId, const string &exit)
-    {
-        ParkingSession *session = findSession(sessionId);
-        if (!session || session->exitTime != "")
-            return false;
-
-        session->exitTime = exit;
-        ParkingSpot *spot = findSpot(session->spotId);
-        if (spot)
-            spot->isOccupied = false;
-        saveData();
-        return true;
-    }
-
-    // Delete functions
-    bool deleteVehicle(const string &vId)
-    {
-        Vehicle **ptr = &vehicles;
-        while (*ptr)
-        {
-            if ((*ptr)->id == vId)
-            {
-                // Check for active sessions
-                for (auto *s = sessions; s; s = s->next)
-                {
-                    if (s->vehicleId == vId && s->exitTime == "")
-                    {
-                        cout << "Cannot delete vehicle with active session\n";
-                        return false;
-                    }
-                }
-                Vehicle *temp = *ptr;
-                *ptr = temp->next;
-                delete temp;
-                saveData();
-                return true;
-            }
-            ptr = &(*ptr)->next;
-        }
-        return false;
-    }
 
     bool deleteSpot(int sid)
     {
