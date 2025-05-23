@@ -20,10 +20,10 @@ double budgets[MAX][MAX] = {0.0};
 
 int findCityIndexByName(string name) {
     transform(name.begin(), name.end(), name.begin(), ::tolower);
-    for (int i = 0; i < cities.size(); i++) {
+    for (size_t i = 0; i < cities.size(); i++) {
         string cityName = cities[i].name;
         transform(cityName.begin(), cityName.end(), cityName.begin(), ::tolower);
-        if (cityName == name) return i;
+        if (cityName == name) return static_cast<int>(i);
     }
     return -1;
 }
@@ -35,7 +35,7 @@ void addCities() {
     cin.ignore();
     for (int i = 0; i < count; i++) {
         City c;
-        c.index = cities.size() + 1;
+        c.index = static_cast<int>(cities.size()) + 1;
         cout << "Enter name for city " << c.index << ": ";
         getline(cin, c.name);
 
@@ -50,8 +50,11 @@ void addCities() {
 void addRoad() {
     string c1, c2;
     cin.ignore();
-    cout << "Enter the name of the first city: "; getline(cin, c1);
-    cout << "Enter the name of the second city: "; getline(cin, c2);
+    cout << "Enter the name of the first city: ";
+    getline(cin, c1);
+    cout << "Enter the name of the second city: ";
+    getline(cin, c2);
+
     int i = findCityIndexByName(c1);
     int j = findCityIndexByName(c2);
     if (i != -1 && j != -1 && i != j) {
@@ -66,10 +69,14 @@ void addBudget() {
     string c1, c2;
     double budget;
     cin.ignore();
-    cout << "Enter the name of the first city: "; getline(cin, c1);
-    cout << "Enter the name of the second city: "; getline(cin, c2);
+    cout << "Enter the name of the first city: ";
+    getline(cin, c1);
+    cout << "Enter the name of the second city: ";
+    getline(cin, c2);
+
     int i = findCityIndexByName(c1);
     int j = findCityIndexByName(c2);
+
     if (i != -1 && j != -1 && roads[i][j] == 1) {
         cout << "Enter the budget for the road: ";
         cin >> budget;
@@ -86,7 +93,7 @@ void editCity() {
     cout << "Enter the index of the city to edit: ";
     cin >> index;
     cin.ignore();
-    if (index >= 1 && index <= cities.size()) {
+    if (index >= 1 && static_cast<size_t>(index) <= cities.size()) {
         cout << "Enter new name for city: ";
         getline(cin, newName);
         cities[index - 1].name = newName;
@@ -100,7 +107,7 @@ void searchCity() {
     int index;
     cout << "Enter city index to search: ";
     cin >> index;
-    if (index >= 1 && index <= cities.size()) {
+    if (index >= 1 && static_cast<size_t>(index) <= cities.size()) {
         cout << index << ": " << cities[index - 1].name << "\n";
     } else {
         cout << "City not found.\n";
@@ -109,16 +116,16 @@ void searchCity() {
 
 void displayCities() {
     cout << "Cities:\n";
-    for (auto c : cities) {
+    for (const auto& c : cities) {
         cout << c.index << ": " << c.name << "\n";
     }
 }
 
 void displayRoads() {
     cout << "Roads Adjacency Matrix:\n";
-    for (int i = 0; i < cities.size(); i++) {
-        for (int j = 0; j < cities.size(); j++) {
-            cout << roads[i][j];
+    for (size_t i = 0; i < cities.size(); i++) {
+        for (size_t j = 0; j < cities.size(); j++) {
+            cout << roads[i][j] << " ";
         }
         cout << endl;
     }
@@ -129,8 +136,8 @@ void displayAll() {
     cout << "\nRoads Adjacency Matrix:\n";
     displayRoads();
     cout << "\nBudgets Adjacency Matrix:\n";
-    for (int i = 0; i < cities.size(); i++) {
-        for (int j = 0; j < cities.size(); j++) {
+    for (size_t i = 0; i < cities.size(); i++) {
+        for (size_t j = 0; j < cities.size(); j++) {
             cout << fixed << setprecision(2) << budgets[i][j] << "\t";
         }
         cout << endl;
@@ -140,7 +147,7 @@ void displayAll() {
 void saveToFile() {
     ofstream cityFile("cities.txt");
     cityFile << "Index\tCity_Name\n";
-    for (auto c : cities) {
+    for (const auto& c : cities) {
         cityFile << c.index << "\t" << c.name << "\n";
     }
     cityFile.close();
@@ -148,8 +155,8 @@ void saveToFile() {
     ofstream roadFile("roads.txt");
     roadFile << "#\tRoad\tBudget\n";
     int count = 1;
-    for (int i = 0; i < cities.size(); i++) {
-        for (int j = i + 1; j < cities.size(); j++) {
+    for (size_t i = 0; i < cities.size(); i++) {
+        for (size_t j = i + 1; j < cities.size(); j++) {
             if (roads[i][j]) {
                 roadFile << count++ << ".\t" << cities[i].name << "-" << cities[j].name << "\t" << budgets[i][j] << "\n";
             }
