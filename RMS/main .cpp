@@ -14,14 +14,16 @@ map<string, City> cities;
 map<string, vector<pair<string, string>>> graph;
 const string CITIES_FILE = "cities.txt";
 
-void loadRoads(){
+void loadCities(){
     cities.clear();
     ifstream file(CITIES_FILE);
     string line;
     getline(file,line);
     while(getline(file,line)){
         stringstream ss(line);
-        string index,name;
+        string id,name;
+        getline(ss, id, ',  ');
+        getline(ss,name);
     }
 }
 
@@ -74,29 +76,7 @@ void addCities() {
         }
     }
 }
-void addCities() {
-    int nextId = 1; // Starting ID for new cities
-    
-    cout << "\nAdding New City(ies): ";
-    bool added = false;
-    
-    while (!added) {
-        char c = '\0';
-        cin >> c;
-        
-        if (c == '\n' || c == ' ') {
-            addSingleCity(nextId);
-            nextId++;
-            added = true;
-        } else if (isdigit(c)) {
-            string name;
-            nextId = stoi(name);
-            // Handle validation here
-            addSingleCity(nextId);
-            nextId++;
-        }
-    }
-}
+
 void addSingleCity(int id) {
     struct City newCity = {id, "Enter city name"};
     
