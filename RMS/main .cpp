@@ -62,11 +62,20 @@ void addCities(CitiesList& list, int maxCities = 100) {
     
 }
 void addRoad(){
-string fd, sd, r;
+string fd, sd;
 cout << "Enter first city: "; cin>> fd;
 cout <<"Enter second city: "; cin>>sd;
 cin.ignore();
 cout <<"Road added between 1 and 2 ";
+
+}
+void addBudget(){
+    string fd, sd, r;
+cout << "Enter first city: "; cin>> fd;
+cout <<"Enter second city: "; cin>>sd;
+cin.ignore();
+cout <<"Enter the budget for the road: ";cin>>r;
+cout<<"Budget added for the road between 1 and 2"
 
 }
 void connectHospitals() {
