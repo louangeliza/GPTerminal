@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <regex>
 using namespace std;
-#include "Utility.h"
+// #include "Utility.h"
 
 struct City {
     int id;
@@ -135,7 +135,7 @@ cout<<"City updated successfully";
 // }
 int main() {
     CitiesList cities;
-    Utility utils;
+    // Utility utils;
 
 
     char choice;
@@ -159,8 +159,10 @@ int main() {
                 editCityName(); // You'll need to implement this function
                 break;
             case '5':
-               { // Search
-            string query = utils.getStringInput("Enter index: ");
+            string id;
+            cout<<"Enter index: ";cin>>id;
+            //    { // Search
+            // string query = utils.getStringInput("Enter search term: ");
             // vector<City *> results = cities.searchCity(query);
             // if (results.empty())
             // {
@@ -175,7 +177,6 @@ int main() {
             //     }
             // }
             break;
-        
             //     break;
             // case '6':
             //     displayCities();
