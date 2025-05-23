@@ -1,0 +1,52 @@
+[Start]
+    |
+    v
+[Display Menu]
+    |
+    v
+[User Input Choice]
+    |
+    +----------------+----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+    |                |                |                |                |                |                |                |                |
+    v                v                v                v                v                v                v                v
+[Add New City]  [Add Road]      [Add Budget]      [Edit City]      [Search City]    [Display Cities] [Display Roads] [Display Data]  [Exit]
+    |                |                |                |                |                |                |                |                |
+    |                |                |                |                |                |                |                |                |
+    v                v                v                v                v                v                v                v                v
+[Input City     [Input First    [Input First    [Input City     [Input City     [Show All      [Show All      [Show Adjacency [End Program]
+ Name(s)]       City Name]      City Name]      Index]          Index]          Cities]        Roads]         Matrices]
+    |                |                |                |                |                |                |                |
+    |                |                |                |                |                |                |                |
+    v                v                v                v                v                v                v                v
+[Auto-index     [Input Second   [Input Second   [Input New      [Display City   [Return to     [Return to     [Return to
+ Cities]        City Name]      City Name]      City Name]      Details]        Menu]          Menu]          Menu]
+    |                |                |                |                |                |                |                |
+    |                |                |                |                |                |                |                |
+    v                v                v                v                v                v                v                v
+[Check if        [Check if        [Check if        [Update City    [Return to      [Return to      [Return to      [Return to
+ Cities Exist]   Cities Exist]   Road Exists]     Name]           Menu]           Menu]           Menu]           Menu]
+    |                |                |                |                |                |                |                |
+    |                |                |                |                |                |                |                |
+    v                v                v                v                v                v                v                v
+[Add to          [Create Road    [Input Road     [Return to      [Return to      [Return to      [Return to      [Return to
+ City List]      Connection]     Budget]         Menu]           Menu]           Menu]           Menu]           Menu]
+    |                |                |                |                |                |                |                |
+    |                |                |                |                |                |                |                |
+    v                v                v                v                v                v                v                v
+[Return to       [Return to      [Update         [Return to      [Return to      [Return to      [Return to      [Return to
+ Menu]           Menu]           Budget Matrix]  Menu]           Menu]           Menu]           Menu]           Menu]
+    |                |                |                |                |                |                |                |
+    +----------------+----------------+----------------+----------------+----------------+----------------+----------------+----------------+
+    |
+    v
+[Return to Menu]
+
+Notes:
+1. Cities are automatically indexed (1, 2, 3, etc.)
+2. Road creation requires both cities to exist
+3. Budget can only be added for existing roads
+4. City editing requires valid city index
+5. Search uses city index to find city name
+6. Display uses two adjacency matrices:
+   - One for road connections
+   - One for road budgets 
