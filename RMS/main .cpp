@@ -158,8 +158,8 @@ int main() {
             case '4':
                 editCityName(); // You'll need to implement this function
                 break;
-            // case '5':
-            //    { // Search
+            case '5':
+               { // Search
             string query = utils.getStringInput("Enter index: ");
             // vector<City *> results = cities.searchCity(query);
             // if (results.empty())
@@ -175,7 +175,7 @@ int main() {
             //     }
             // }
             break;
-        }
+        
             //     break;
             // case '6':
             //     displayCities();
