@@ -39,14 +39,3 @@
     +----------------+----------------+----------------+----------------+----------------+----------------+----------------+----------------+
     |
     v
-[Return to Menu]
-
-Notes:
-1. Cities are automatically indexed (1, 2, 3, etc.)
-2. Road creation requires both cities to exist
-3. Budget can only be added for existing roads
-4. City editing requires valid city index
-5. Search uses city index to find city name
-6. Display uses two adjacency matrices:
-   - One for road connections
-   - One for road budgets 
