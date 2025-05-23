@@ -108,27 +108,30 @@ cout<<"Budget added for the road between 1 and 2";
 // }
 void editCityName(){
 string id;
-cout<<"Enter index of the city to edit: "; cin>> if
+cout<<"Enter index of the city to edit: "; cin >> id;
+string name;
+cout <<"Enter new name for city: "; cin>>name;
+cout<<"City updated successfully";
 }
-void updateHospital() {
-    string id;
-    cout << "Enter Hospital ID to update: "; cin >> id;
-    if (hospitals.find(id) == hospitals.end()) {
-        cout << "Hospital ID not found.\n";
-        return;
-    }
-    string name, location, patient_str;
-    cout << "Enter New Name: "; cin.ignore(); getline(cin, name);
-    cout << "Enter New Location: "; getline(cin, location);
-    cout << "Enter New Number of Patients: "; getline(cin, patient_str);
-    if (!isNumber(patient_str)) {
-        cout << "Invalid patient number.\n";
-        return;
-    }
-    hospitals[id] = {id, name, location, stoi(patient_str)};
-    saveHospitals();
-    cout << "Hospital updated successfully.\n";
-}
+// void updateHospital() {
+//     string id;
+//     cout << "Enter Hospital ID to update: "; cin >> id;
+//     if (hospitals.find(id) == hospitals.end()) {
+//         cout << "Hospital ID not found.\n";
+//         return;
+//     }
+//     string name, location, patient_str;
+//     cout << "Enter New Name: "; cin.ignore(); getline(cin, name);
+//     cout << "Enter New Location: "; getline(cin, location);
+//     cout << "Enter New Number of Patients: "; getline(cin, patient_str);
+//     if (!isNumber(patient_str)) {
+//         cout << "Invalid patient number.\n";
+//         return;
+//     }
+//     hospitals[id] = {id, name, location, stoi(patient_str)};
+//     saveHospitals();
+//     cout << "Hospital updated successfully.\n";
+// }
 int main() {
     CitiesList cities;
 
