@@ -13,26 +13,35 @@ struct City {
 };
 
 int nextId = 1; // Starting ID for new cities
-    
+
 struct CitiesList {
     vector<City> cities; // This is a local variable, so it's only accessible within this function
 };
 
 void addCities(CitiesList& list, int maxCities = 10) {
-    cout << "\nAdding New Cities(ies): " << maxCities << "\n";
+    cout << "\nAdding New Cities... (up to " << maxCities << " cities)\n";
     
-    while (true) { 
-        char c = '\0';
-        
-        cout << "Enter city name: ";
+    // Ask how many cities the user wants to add
+    int citiesToAdd;
+    do {
+        cout << "Enter number of cities to add: ";
+        cin >> citiesToAdd;
+    } while (citiesToAdd < 1 || citiesToAdd > maxCities);
+
+    if (citiesToAdd == 0) { // If no cities were added, exit the function
+        return;
+    }
+
+    for (int i = 0; i < citiesToAdd; ++i) {
+        cout << "\nEnter city name: ";
         string name;
         cin >> name;
-        
+
         if (name.empty()) {
             cout << "City name cannot be empty. Please try again.\n";
             continue;
         }
-        
+
         // Validate the ID to ensure uniqueness
         bool unique = true;
         for (const City& c : list.cities) {
@@ -45,24 +54,15 @@ void addCities(CitiesList& list, int maxCities = 10) {
             cout << "ID already exists. Please choose a different number.\n";
             continue;
         }
-        
+
         nextId++;
         list.cities.push_back({nextId, name});
-        
-        cout << "\nCities added successfully!\n";
-        
-        // Ask the user how many cities they want to add
-        int citiesToAdd;
-        do {
-            cout << "Enter number of cities to add: ";
-            cin >> citiesToAdd;
-        } while (citiesToAdd < 1 || citiesToAdd > maxCities);
     }
 }
 
 int main() {
-    CitiesList cities; // This is a local variable, so it's only accessible within this function
-    
+    CitiesList cities;
+
     char choice;
     do {
         cout << "\n==== City and Road Management System ====\n";
@@ -72,15 +72,31 @@ int main() {
         
         switch (choice) {
             case '1':
-                addCities(cities); // Pass the cities variable to addCities
+                addCities(cities, 5); // Add a maximum of 5 cities when selecting option 1
                 break;
             // case '2':
-            //     addRoad();
+            //     addRoad(); // You'll need to implement this function
             //     break;
             // case '3':
             //     addBudget();
             //     break;
-            // Continue with other cases...
+            // case '4':
+            //     editCityName(); // You'll need to implement this function
+            //     break;
+            // case '5':
+            //     searchCities();
+            //     break;
+            // case '6':
+            //     displayCities();
+            //     break;
+            // case '7':
+            //     displayRoads();
+            //     break;
+            // case '8':
+            //     showData();
+            //     break;
+            case '9':
+                exit(0);
             default:
                 cout << "Invalid choice. Please try again.\n";
         }
