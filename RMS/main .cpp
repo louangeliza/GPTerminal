@@ -190,3 +190,48 @@ void displayRoads() {
               << endl;
     }
 }
+void saveCities() {
+    std::ifstream file(CITIES_FILE);
+    std::string line;
+    while(std::getline(file, line)){
+        std::stringstream ss(line);
+        int id, name;
+        ss >> id >> name;
+        cout << "ID: " << id << ", Name: " << name << endl;
+    }
+}
+void addSingleCity(int id) {
+    struct City newCity = {id, "Enter city name"};
+    
+    std::ifstream file(CITIES_FILE);
+    if(file.is_open()){
+        std::string line;
+        while(std::getline(file, line)){
+            if(line.find(id + ',') != std::string::npos){
+                newCity.name = line.substr(0, line.find(','));
+                break;
+            }
+        }
+        file.close();
+        
+        // Validate the ID to ensure uniqueness
+        bool unique = true;
+        for (const City& c : cities) {
+            if (c.id == id) {
+                unique = false;
+                break;
+            }
+        }
+        if (!unique) {
+            cout << "ID already exists. Please choose a different number.\n";
+            return;
+        }
+        
+        // Add to the list
+        cities.push_back(newCity);
+    } else {
+        cout << "Unable to read file: CITIES_FILE\n";
+    }
+    
+    saveCities();
+}
