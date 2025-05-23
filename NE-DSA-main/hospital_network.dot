@@ -1,0 +1,13 @@
+graph HospitalNetwork {
+  node [shape=box, style=filled, fillcolor=lightblue];
+  edge [color=blue];
+  "1" [label="1\nKibuye"];
+  "2" [label="2\nGisenyi"];
+  "3" [label="3\nKabgayi"];
+  "4" [label="4\nRuhengeri"];
+  "1" -- "2" [label="30 km"];
+  "1" -- "3" [label="30 km"];
+  "1" -- "4" [label="89 km"];
+  "2" -- "3" [label="40 km"];
+  "3" -- "4" [label="30 km"];
+}

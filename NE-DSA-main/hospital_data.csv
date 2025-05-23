@@ -1,0 +1,15 @@
+Hospital Data
+ID,Name,Location,Employees
+1,Kibuye,Karongi,100
+2,Gisenyi,Rubavu,20
+3,Kabgayi,Muhanga,102
+4,Ruhengeri,Musanze,39
+6,regis,merci,40
+
+Road Connections
+From ID,From Name,To ID,To Name,Distance (km)
+1,Kibuye,2,Gisenyi,30
+1,Kibuye,3,Kabgayi,30
+1,Kibuye,4,Ruhengeri,89
+2,Gisenyi,3,Kabgayi,40
+3,Kabgayi,4,Ruhengeri,30

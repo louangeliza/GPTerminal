@@ -1,0 +1,21 @@
+=== Hospital Network Report ===
+
+Hospitals in the network:
+ID: 1, Name: Kibuye, Location: Karongi, Employees: 100
+ID: 2, Name: Gisenyi, Location: Rubavu, Employees: 20
+ID: 3, Name: Kabgayi, Location: Muhanga, Employees: 102
+ID: 4, Name: Ruhengeri, Location: Musanze, Employees: 39
+
+Road connections between hospitals:
+From 1 (Kibuye) to:
+  - 2 (Gisenyi), Distance: 30 km
+  - 3 (Kabgayi), Distance: 30 km
+  - 4 (Ruhengeri), Distance: 89 km
+From 2 (Gisenyi) to:
+  - 3 (Kabgayi), Distance: 40 km
+From 3 (Kabgayi) to:
+  - 4 (Ruhengeri), Distance: 30 km
+From 4 (Ruhengeri) to:
+
+Hospitals with no road connections:
+All hospitals are connected!

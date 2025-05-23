@@ -1,0 +1,4 @@
+HospitalID,HospitalName,Location,ConnectedHospitals
+0,Kanombe Hospital,Kanombe,1(5.00);2(7.00)
+1,Kibagabaga Hospital,Kibagabaga,0(5.00);2(3.00)
+2,Kabgayi Hospital,Kabgayi,1(3.00);0(7.00)
