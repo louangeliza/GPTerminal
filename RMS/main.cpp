@@ -152,25 +152,31 @@ void displayCities() {
 }
 
 void displayRoads() {
-    cout << "\nRoads Adjacency Matrix:\n";
-    for (size_t i = 0; i < cities.size(); i++) {
-        for (size_t j = 0; j < cities.size(); j++) {
-            cout << roads[i][j] << " ";
+    cout << "Roads Adjacency Matrix:\n\t";
+    for (const auto& c : cities)
+        cout << c.name << "\t";
+    cout << "\n";
+
+    for (size_t i = 0; i < cities.size(); ++i) {
+        cout << cities[i].name << "\t";
+        for (size_t j = 0; j < cities.size(); ++j) {
+            cout << roads[i][j] << "\t";
         }
-        cout << endl;
+        cout << "\n";
     }
 }
 
-void displayAll() {
-    displayCities();
-    displayRoads();
-    cout << "\nBudgets Adjacency Matrix:\n";
-    for (size_t i = 0; i < cities.size(); i++) {
-        for (size_t j = 0; j < cities.size(); j++) {
-            cout << fixed << setprecision(2) << budgets[i][j] << "\t";
-        }
-        cout << endl;
+cout << "\nBudgets Adjacency Matrix:\n\t";
+for (const auto& c : cities)
+    cout << c.name << "\t";
+cout << "\n";
+
+for (size_t i = 0; i < cities.size(); ++i) {
+    cout << cities[i].name << "\t";
+    for (size_t j = 0; j < cities.size(); ++j) {
+        cout << fixed << setprecision(2) << budgets[i][j] << "\t";
     }
+    cout << "\n";
 }
 
 void saveToFile() {
