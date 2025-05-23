@@ -4,9 +4,9 @@
 #include <iomanip>
 #include <fstream>
 #include <algorithm>
+#include <limits>
 
 #define MAX 100
-
 using namespace std;
 
 struct City {
@@ -17,6 +17,11 @@ struct City {
 vector<City> cities;
 int roads[MAX][MAX] = {0};
 double budgets[MAX][MAX] = {0.0};
+
+void clearInputBuffer() {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
 
 int findCityIndexByName(string name) {
     transform(name.begin(), name.end(), name.begin(), ::tolower);
@@ -31,8 +36,12 @@ int findCityIndexByName(string name) {
 void addCities() {
     int count;
     cout << "Enter the number of cities to add: ";
-    cin >> count;
-    cin.ignore();
+    if (!(cin >> count) || count <= 0) {
+        cout << "Invalid number.\n";
+        clearInputBuffer();
+        return;
+    }
+    clearInputBuffer();
     for (int i = 0; i < count; i++) {
         City c;
         c.index = static_cast<int>(cities.size()) + 1;
@@ -49,7 +58,6 @@ void addCities() {
 
 void addRoad() {
     string c1, c2;
-    cin.ignore();
     cout << "Enter the name of the first city: ";
     getline(cin, c1);
     cout << "Enter the name of the second city: ";
@@ -57,18 +65,18 @@ void addRoad() {
 
     int i = findCityIndexByName(c1);
     int j = findCityIndexByName(c2);
+
     if (i != -1 && j != -1 && i != j) {
         roads[i][j] = roads[j][i] = 1;
         cout << "Road added between " << cities[i].name << " and " << cities[j].name << ".\n";
     } else {
-        cout << "Invalid cities entered.\n";
+        cout << "Invalid cities or same city entered.\n";
     }
 }
 
 void addBudget() {
     string c1, c2;
     double budget;
-    cin.ignore();
     cout << "Enter the name of the first city: ";
     getline(cin, c1);
     cout << "Enter the name of the second city: ";
@@ -79,11 +87,16 @@ void addBudget() {
 
     if (i != -1 && j != -1 && roads[i][j] == 1) {
         cout << "Enter the budget for the road: ";
-        cin >> budget;
+        if (!(cin >> budget) || budget < 0) {
+            cout << "Invalid budget.\n";
+            clearInputBuffer();
+            return;
+        }
+        clearInputBuffer();
         budgets[i][j] = budgets[j][i] = budget;
-        cout << "Budget added for the road between " << cities[i].name << " and " << cities[j].name << ".\n";
+        cout << "Budget added between " << cities[i].name << " and " << cities[j].name << ".\n";
     } else {
-        cout << "Road not found between the cities.\n";
+        cout << "No road exists between the given cities.\n";
     }
 }
 
@@ -91,8 +104,12 @@ void editCity() {
     int index;
     string newName;
     cout << "Enter the index of the city to edit: ";
-    cin >> index;
-    cin.ignore();
+    if (!(cin >> index)) {
+        cout << "Invalid index.\n";
+        clearInputBuffer();
+        return;
+    }
+    clearInputBuffer();
     if (index >= 1 && static_cast<size_t>(index) <= cities.size()) {
         cout << "Enter new name for city: ";
         getline(cin, newName);
@@ -106,7 +123,11 @@ void editCity() {
 void searchCity() {
     int index;
     cout << "Enter city index to search: ";
-    cin >> index;
+    if (!(cin >> index)) {
+        cout << "Invalid input.\n";
+        clearInputBuffer();
+        return;
+    }
     if (index >= 1 && static_cast<size_t>(index) <= cities.size()) {
         cout << index << ": " << cities[index - 1].name << "\n";
     } else {
@@ -115,14 +136,14 @@ void searchCity() {
 }
 
 void displayCities() {
-    cout << "Cities:\n";
+    cout << "\nCities:\n";
     for (const auto& c : cities) {
         cout << c.index << ": " << c.name << "\n";
     }
 }
 
 void displayRoads() {
-    cout << "Roads Adjacency Matrix:\n";
+    cout << "\nRoads Adjacency Matrix:\n";
     for (size_t i = 0; i < cities.size(); i++) {
         for (size_t j = 0; j < cities.size(); j++) {
             cout << roads[i][j] << " ";
@@ -133,7 +154,6 @@ void displayRoads() {
 
 void displayAll() {
     displayCities();
-    cout << "\nRoads Adjacency Matrix:\n";
     displayRoads();
     cout << "\nBudgets Adjacency Matrix:\n";
     for (size_t i = 0; i < cities.size(); i++) {
@@ -144,10 +164,6 @@ void displayAll() {
     }
 }
 
-#include <fstream>
-#include <iomanip> // for setw, left
-using namespace std;
-
 void saveToFile() {
     ofstream cityFile("cities.txt");
     if (!cityFile) {
@@ -155,7 +171,6 @@ void saveToFile() {
         return;
     }
 
-    // Headers
     cityFile << left << setw(8) << "Index" << "City_Name\n";
     for (const auto& c : cities) {
         cityFile << left << setw(8) << c.index << c.name << "\n";
@@ -168,7 +183,6 @@ void saveToFile() {
         return;
     }
 
-    // Headers
     roadFile << left << setw(5) << "#" << setw(25) << "Road" << "Budget\n";
     int count = 1;
     for (size_t i = 0; i < cities.size(); ++i) {
@@ -182,7 +196,6 @@ void saveToFile() {
     roadFile.close();
 }
 
-
 int main() {
     int choice;
     while (true) {
@@ -195,9 +208,14 @@ int main() {
         cout << "6. Display cities\n";
         cout << "7. Display roads\n";
         cout << "8. Display recorded data on console\n";
-        cout << "9. Exit\n";
+        cout << "9. Save and Exit\n";
         cout << "Enter your choice: ";
-        cin >> choice;
+        if (!(cin >> choice)) {
+            cout << "Invalid input. Please enter a number.\n";
+            clearInputBuffer();
+            continue;
+        }
+        clearInputBuffer();
 
         switch (choice) {
             case 1: addCities(); break;
@@ -212,5 +230,4 @@ int main() {
             default: cout << "Invalid choice.\n"; break;
         }
     }
-    return 0;
 }
