@@ -142,10 +142,15 @@ void addRoad() {
         return;
     }
 
-    int i = addCityIfNotExists(c1);
-    int j = addCityIfNotExists(c2);
+    int i = findCityIndexByName(c1);
+    int j = findCityIndexByName(c2);
 
-    if (i != -1 && j != -1 && i != j) {
+    if (i == -1 || j == -1) {
+        cout << "One or both cities do not exist. Please add them first.\n";
+        return;
+    }
+
+    if (i != j) {
         roads[i][j] = roads[j][i] = 1;
         cout << "Road added between " << cities[i].name << " and " << cities[j].name << ".\n";
     } else {
@@ -153,9 +158,11 @@ void addRoad() {
     }
 }
 
+
 void addBudget() {
     string c1, c2;
     double budget;
+
     cout << "Enter the name of the first city: ";
     getline(cin, c1);
     if (c1.empty()) {
@@ -170,14 +177,20 @@ void addBudget() {
         return;
     }
 
-    int i = addCityIfNotExists(c1);
-    int j = addCityIfNotExists(c2);
+    int i = findCityIndexByName(c1);
+    int j = findCityIndexByName(c2);
 
-    if (i != -1 && j != -1 && i != j) {
+    if (i == -1 || j == -1) {
+        cout << "One or both cities do not exist. Please add them first.\n";
+        return;
+    }
+
+    if (i != j) {
         if (roads[i][j] == 0) {
-            roads[i][j] = roads[j][i] = 1;
-            cout << "Road added between " << cities[i].name << " and " << cities[j].name << ".\n";
+            cout << "No road exists between these cities. Please add the road first.\n";
+            return;
         }
+
         if (!getDoubleInput("Enter the budget for the road: ", budget)) {
             return;
         }
@@ -185,6 +198,7 @@ void addBudget() {
             cout << "Invalid budget. Must be non-negative.\n";
             return;
         }
+
         budgets[i][j] = budgets[j][i] = budget;
         cout << "Budget added between " << cities[i].name << " and " << cities[j].name << ".\n";
     } else {
